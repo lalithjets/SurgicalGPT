@@ -1,11 +1,3 @@
-
-'''
-Description     : Train classification model.
-Paper           : Surgical-VQA: Visual Question Answering in Surgical Scenes Using Transformers
-Author          : Lalithkumar Seenivasan, Mobarakol Islam, Adithya Krishna, Hongliang Ren
-Lab             : MMLAB, National University of Singapore
-'''
-
 import os
 import argparse
 import pandas as pd

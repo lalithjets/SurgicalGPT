@@ -1,12 +1,3 @@
-'''
-Description     : VisualBert Classification Model
-Author          : Lalithkumar Seenivasan, Mobarakol Islam, Adithya Krishna, Hongliang Ren
-Paper           : Surgical-VQA: Visual Question Answering in Surgical Scenes Using Transformers
-Lab             : MMLAB, National University of Singapore
-Acknowledgement : Code adopted from the official implementation of VisualBertModel from 
-                  huggingface/transformers (https://github.com/huggingface/transformers.git).
-'''
-
 import torch
 from torch import nn
 from transformers import VisualBertModel, VisualBertConfig

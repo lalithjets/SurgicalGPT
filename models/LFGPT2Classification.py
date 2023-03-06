@@ -197,18 +197,18 @@ class BioGPT2RS18Classification(nn.Module):
         # GPT text encoder
         text_feature = self.text_feature_extractor(**input)
         text_feature = text_feature[0].swapaxes(1,2)
-        #mobarak: [1, 12, 42384], text feature is too big compare to img. We may pool it to 512 the equal size of img
+        #m: [1, 12, 42384], text feature is too big compare to img. We may pool it to 512 the equal size of img
         #F.adaptive_avg_pool2d(output[0],[1, 512])
         text_feature = F.adaptive_avg_pool1d(text_feature,1) 
         text_feature = text_feature.swapaxes(1,2).squeeze()
 
         # late visual-text fusion
-        #mobarak: advanced level fusion can be used instead of naive concat (e.g., multihead attention fusion)
+        #m: advanced level fusion can be used instead of naive concat (e.g., multihead attention fusion)
         img_text_features = torch.cat((img_feature, text_feature), dim=1)
 
         # intermediate layers
         out =self.intermediate_layer(img_text_features)
-        #mobarak: we may add one more intermidiate layer if the features size is bigger
+        #m: we may add one more intermidiate layer if the features size is bigger
         out = self.LayerNorm(out)
         out = self.dropout(out)
 

@@ -9,7 +9,7 @@ from transformers import VisualBertModel, GPT2Model, ViTModel, SwinModel
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-''' Custom embedding GPT with CNN/Transformers (Mob's implementation)'''
+''' Custom embedding GPT with CNN/Transformers (**** implementation)'''
 
 
 class ViLEmbeddings(nn.Module):

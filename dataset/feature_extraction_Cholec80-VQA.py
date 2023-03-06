@@ -31,7 +31,7 @@ class FeatureExtractor(nn.Module):
 filenames = []
 seq = ['1','2','3','4','6','7','8','9','10','13','14','15','16','18','20', '5','11','12','17','19','26','27','31',
           '21','22','23','24','25','28','29','30','32','33','34','35','36','37','38','39','40']
-folder_head = '/media/mobarak/data/lalith_dataset/Cholec80-VQA/cropped_image/'
+folder_head = '*/dataset/Cholec80-VQA/cropped_image/'
 folder_tail = '/*.png'
 for curr_seq in seq: 
     filenames = filenames + glob(folder_head + str(curr_seq) + folder_tail)

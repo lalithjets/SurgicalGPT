@@ -11,6 +11,7 @@ dataset/bertvocab/*.txt
 dataset/Cholec80-VQA
 dataset/EndoVis-18-VQA
 dataset/VQA-Med
+dataset/PSI-AVA-VQA
 dataset/*.ipynb
 
 depricated/

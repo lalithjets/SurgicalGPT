@@ -1,14 +1,3 @@
-'''
-Description     : VisualBert ResMLP model that integrates VisualBert [1] model and ResMLP [2] model.
-Paper           : Surgical-VQA: Visual Question Answering in Surgical Scenes Using Transformers
-Author          : Lalithkumar Seenivasan, Mobarakol Islam, Adithya Krishna, Hongliang Ren
-Lab             : MMLAB, National University of Singapore
-Acknowledgement : Code adopted from the official implementation of VisualBertModel from 
-                  huggingface/transformers (https://github.com/huggingface/transformers.git) and modified.
-                  [1]
-                  [2]
-'''
-
 import math
 import torch
 import torch.nn as nn

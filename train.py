@@ -1,10 +1,3 @@
-'''
-Description     : Train classification model.
-Paper           : Surgical-VQA: Visual Question Answering in Surgical Scenes Using Transformers
-Author          : Lalithkumar Seenivasan, Mobarakol Islam, Adithya Krishna, Hongliang Ren
-Lab             : MMLAB, National University of Singapore
-'''
-
 import os
 import argparse
 import pandas as pd
@@ -21,10 +14,11 @@ from transformers import BertTokenizer, GPT2Tokenizer
 
 from utils import *
 from dataloaders.dataloaderClassification import *
+from dataloaders.dataloaderGPT2Classification import *
 from models.VisualBertClassification import VisualBertClassification
 from models.VisualBertResMLPClassification import VisualBertResMLPClassification
 # from models.ViReVisualBertClassification import ViReVisualBertClassification
-from models.EFGPT2Classification import EFVLEGPT2RS18Classification, EFVLEGPT2SwinClassification
+from models.EFGPT2Classification import EFVLEGPT2RS18Classification, EFVLEGPT2SwinClassification, EFVLEGPT2ViTClassification
 # from models.EFGPT2GCVITClassification import EFGPT2GCVITClassification
 # from models.EFViLGPT2Classification import ViLGPT2VQA
 # from models.LFGPT2Classification import GPT2RS18Classification, GPT2ViTClassification, GPT2SwinClassification, BioGPT2RS18Classification
@@ -77,25 +71,25 @@ def train(args, train_dataloader, model, criterion, optimizer, epoch, tokenizer,
         questions = []
         for question in q: questions.append(question)
         
-        if args.model_ver == 'vb' or args.model_ver == 'vbrm' \
-                # or args.model_ver == 'vrvb'
-                :
+        if args.model_ver == 'vb' or args.model_ver == 'vbrm':
+            # or args.model_ver == 'vrvb'
+
             inputs = tokenizer(questions, return_tensors="pt", padding="max_length", max_length=args.question_len)
         
-        elif args.model_ver == 'efvlegpt2rs18' or args.model_ver == "efvlegpt2Swin" \
-                # or args.model_ver == 'efgpt2gcViT' \
-                # or args.model_ver == 'vilgpt2vqa' \
-                # or args.model_ver == 'gpt2rs18' or args.model_ver == 'gpt2ViT' or args.model_ver == "gpt2Swin" or args.model_ver == "biogpt2rs18" \
-                # or args.model_ver == 'efgpt2rs18gr' or args.model_ver == "efvlegpt2Swingr" \
-                :    
+        elif args.model_ver == 'efvlegpt2rs18' or args.model_ver == "efvlegpt2Swin" or args.model_ver == 'efvlegpt2ViT':
+            # or args.model_ver == 'efgpt2gcViT' \
+            # or args.model_ver == 'vilgpt2vqa' \
+            # or args.model_ver == 'gpt2rs18' or args.model_ver == 'gpt2ViT' or args.model_ver == "gpt2Swin" or args.model_ver == "biogpt2rs18" \
+            # or args.model_ver == 'efgpt2rs18gr' or args.model_ver == "efvlegpt2Swingr" \    
+
             # inputs = tokenizer(questions, padding=True, truncation=True, return_tensors="pt")
-            inputs = tokenizer(questions, padding="max_length",max_length=20, return_tensors="pt")
+            inputs = tokenizer(questions, padding="max_length",max_length= args.question_len, return_tensors="pt")
 
         # Visual features
-        if args.model_ver == "efvlegpt2Swin" \
-                # or args.model_ver == 'gpt2ViT' or args.model_ver == "gpt2Swin" \
-                # or args.model_ver == "efvlegpt2Swingr" \
-                :            
+        if args.model_ver == "efvlegpt2Swin" or args.model_ver == 'efvlegpt2ViT':
+            # or args.model_ver == 'gpt2ViT' or args.model_ver == "gpt2Swin" \
+            # or args.model_ver == "efvlegpt2Swingr" \
+
             visual_features = v_f
             visual_features['pixel_values'] = torch.squeeze(visual_features['pixel_values'],1)
         else:
@@ -152,26 +146,26 @@ def validate(args, val_loader, model, criterion, epoch, tokenizer, device, save_
             questions = []
             for question in q: questions.append(question)
 
-            if args.model_ver == 'vb' or args.model_ver == 'vbrm' \
-                    # or args.model_ver == 'vrvb'
-                    :
+            if args.model_ver == 'vb' or args.model_ver == 'vbrm':
+                # or args.model_ver == 'vrvb'
+                
                 inputs = tokenizer(questions, return_tensors="pt", padding="max_length", max_length=args.question_len)
             
-            elif args.model_ver == 'efvlegpt2rs18' or args.model_ver == "efvlegpt2Swin" \
-                    # or args.model_ver == 'efgpt2gcViT' \
-                    # or args.model_ver == 'vilgpt2vqa' \
-                    # or args.model_ver == 'gpt2rs18' or args.model_ver == 'gpt2ViT' or args.model_ver == "gpt2Swin" or args.model_ver == "biogpt2rs18" \
-                    # or args.model_ver == 'efgpt2rs18gr' or args.model_ver == "efvlegpt2Swingr" \
-                    :
+            elif args.model_ver == 'efvlegpt2rs18' or args.model_ver == "efvlegpt2Swin" or args.model_ver == 'efvlegpt2ViT':
+                # or args.model_ver == 'efgpt2gcViT' \
+                # or args.model_ver == 'vilgpt2vqa' \
+                # or args.model_ver == 'gpt2rs18' or args.model_ver == 'gpt2ViT' or args.model_ver == "gpt2Swin" or args.model_ver == "biogpt2rs18" \
+                # or args.model_ver == 'efgpt2rs18gr' or args.model_ver == "efvlegpt2Swingr" \
+                
                 # inputs = tokenizer(questions, padding=True, truncation=True, return_tensors="pt",)
-                inputs = tokenizer(questions, padding="max_length",max_length=20, return_tensors="pt")
+                inputs = tokenizer(questions, padding="max_length",max_length=args.question_len, return_tensors="pt")
 
             # GPU / CPU
             # Visual features
-            if args.model_ver == "efvlegpt2Swin" \
-                    # or args.model_ver == 'gpt2ViT' or args.model_ver == "gpt2Swin" \
-                    # or args.model_ver == "efvlegpt2Swingr" \
-                    :     
+            if args.model_ver == "efvlegpt2Swin" or args.model_ver == 'efvlegpt2ViT':
+                # or args.model_ver == 'gpt2ViT' or args.model_ver == "gpt2Swin" \
+                # or args.model_ver == "efvlegpt2Swingr" \
+                     
                 visual_features = v_f
                 visual_features['pixel_values'] = torch.squeeze(visual_features['pixel_values'],1)
             else:
@@ -267,7 +261,7 @@ if __name__ == '__main__':
     # existing checkpoint
     parser.add_argument('--checkpoint',     default=None,                                           help='path to checkpoint, None if none.')
     
-    parser.add_argument('--lr',             type=float, default=0.000005,                           help='0.000005, 0.00001, 0.000005')
+    parser.add_argument('--lr',             type=float, default=0.00001,                           help='0.000005, 0.00001, 0.000005')
     parser.add_argument('--checkpoint_dir', default= 'checkpoints/clf_biogpt2rs18/c80/',            help='med_vqa_c$version$/m18/c80/m18_vid$temporal_size$/c80_vid$temporal_size$') #clf_v1_2_1x1/med_vqa_c3
     parser.add_argument('--dataset_type',   default= None,                                          help='med_vqa/m18/c80/m18_vid/c80_vid')
     parser.add_argument('--dataset_cat',    default= 'cat1',                                        help='cat1/cat2/cat3')
@@ -296,7 +290,7 @@ if __name__ == '__main__':
         v1: visual embedding : Default patch1 + GPT2 decoder
     '''
 
-    print(args.model_ver, args.model_subver, args.dataset_type, args.dataset_cat, args.lr, args.checkpoint_dir)
+    print(args.model_ver, args.model_subver, args.vis_pos_emb, args.dataset_type, args.dataset_cat, args.lr, args.checkpoint_dir)
     # load checkpoint, these parameters can't be modified
     final_args = {"emb_dim": args.emb_dim, "n_heads": args.n_heads, "dropout": args.dropout, "encoder_layers": args.encoder_layers}
     
@@ -312,6 +306,7 @@ if __name__ == '__main__':
     best_epoch = [0]
     best_results = [0.0]
     epochs_since_improvement = 0
+
 
     # dataset
     if args.dataset_type == 'med_vqa':
@@ -336,19 +331,19 @@ if __name__ == '__main__':
         val_img_folder = 'val_images/'
 
         # dataloader
-        if args.model_ver == 'vb' or args.model_ver == 'vbrm' \
-                # or args.model_ver == 'vrvb' \
-                :
+        if args.model_ver == 'vb' or args.model_ver == 'vbrm':
+            # or args.model_ver == 'vrvb' \
+
             train_dataset = MedVQAVBClassification(train_folder, train_img_folder, args.dataset_cat, patch_size = args.patch_size, validation=False)
             train_dataloader = DataLoader(dataset=train_dataset, batch_size= args.batch_size, shuffle=True)
             val_dataset = MedVQAVBClassification(val_folder, val_img_folder, args.dataset_cat, patch_size = args.patch_size, validation=True)
             val_dataloader = DataLoader(dataset=val_dataset, batch_size= args.batch_size, shuffle=False)
-        elif args.model_ver == 'efvlegpt2rs18' or args.model_ver == "efvlegpt2Swin" \
-                # or args.model_ver == 'efgpt2gcViT' \
-                # or args.model_ver == 'vilgpt2vqa' \
-                # or args.model_ver == 'gpt2rs18' or args.model_ver == 'gpt2ViT' or args.model_ver == "gpt2Swin" or args.model_ver == "biogpt2rs18" \
-                # or args.model_ver == 'efgpt2rs18gr' or args.model_ver == "efvlegpt2Swingr" \
-                :
+        elif args.model_ver == 'efvlegpt2rs18' or args.model_ver == "efvlegpt2Swin" or args.model_ver == 'efvlegpt2ViT':
+            # or args.model_ver == 'efgpt2gcViT' \
+            # or args.model_ver == 'vilgpt2vqa' \
+            # or args.model_ver == 'gpt2rs18' or args.model_ver == 'gpt2ViT' or args.model_ver == "gpt2Swin" or args.model_ver == "biogpt2rs18" \
+            # or args.model_ver == 'efgpt2rs18gr' or args.model_ver == "efvlegpt2Swingr" \
+            
             train_dataset = MedVQAGPTClassification(train_folder, train_img_folder, args.dataset_cat, model_ver=args.model_ver, validation=False)
             train_dataloader = DataLoader(dataset=train_dataset, batch_size= args.batch_size, shuffle=True, num_workers=8)
             val_dataset = MedVQAGPTClassification(val_folder, val_img_folder, args.dataset_cat, model_ver=args.model_ver, validation=True)
@@ -383,19 +378,19 @@ if __name__ == '__main__':
         folder_tail = '/vqa/Classification/*.txt'
         
         # dataloader
-        if args.model_ver == 'vb' or args.model_ver == 'vbrm' \
-                # or args.model_ver == 'vrvb' \
-                :
+        if args.model_ver == 'vb' or args.model_ver == 'vbrm' :
+            # or args.model_ver == 'vrvb' \
+            
             train_dataset = EndoVis18VQAVBClassification(train_seq, folder_head, folder_tail, patch_size = args.patch_size)
             train_dataloader = DataLoader(dataset=train_dataset, batch_size= args.batch_size, shuffle=True)
             val_dataset = EndoVis18VQAVBClassification(val_seq, folder_head, folder_tail, patch_size = args.patch_size)
             val_dataloader = DataLoader(dataset=val_dataset, batch_size= args.batch_size, shuffle=False)
-        elif args.model_ver == 'efvlegpt2rs18' or args.model_ver == "efvlegpt2Swin" \
-                # or args.model_ver == 'efgpt2gcViT' \
-                # or args.model_ver == 'vilgpt2vqa' \
-                # or args.model_ver == 'gpt2rs18' or args.model_ver == 'gpt2ViT' or args.model_ver == "gpt2Swin" or args.model_ver == "biogpt2rs18" \
-                # or args.model_ver == 'efgpt2rs18gr' or args.model_ver == "efvlegpt2Swingr" \
-                :
+        elif args.model_ver == 'efvlegpt2rs18' or args.model_ver == "efvlegpt2Swin" or args.model_ver == 'efvlegpt2ViT':
+            # or args.model_ver == 'efgpt2gcViT' \
+            # or args.model_ver == 'vilgpt2vqa' \
+            # or args.model_ver == 'gpt2rs18' or args.model_ver == 'gpt2ViT' or args.model_ver == "gpt2Swin" or args.model_ver == "biogpt2rs18" \
+            # or args.model_ver == 'efgpt2rs18gr' or args.model_ver == "efvlegpt2Swingr" \
+
             train_dataset = EndoVis18VQAGPTClassification(train_seq, folder_head, folder_tail, model_ver=args.model_ver)
             train_dataloader = DataLoader(dataset=train_dataset, batch_size= args.batch_size, shuffle=True, num_workers=8)
             val_dataset = EndoVis18VQAGPTClassification(val_seq, folder_head, folder_tail, model_ver=args.model_ver)
@@ -403,46 +398,6 @@ if __name__ == '__main__':
 
         # num_classes
         args.num_class = 18
-
-    # elif args.dataset_type == 'm18_vid':
-    #     '''
-    #     Train and test dataloader for EndoVis18 temporal
-    #     '''
-    #     # tokenizer
-    #     tokenizer = None
-    #     if args.tokenizer_ver == 'btv2': tokenizer = BertTokenizer.from_pretrained('./dataset/bertvocab/v2/bert-EndoVis-18-VQA/')
-    #     elif args.tokenizer_ver == 'btv3': tokenizer = BertTokenizer.from_pretrained('./dataset/bertvocab/v3/bert-EndoVis-18-VQA/', do_lower_case=True)
-    #     elif args.tokenizer_ver == 'gpt2v1':
-    #         tokenizer = GPT2Tokenizer.from_pretrained('gpt2')
-    #         tokenizer.pad_token = tokenizer.eos_token
-    #     elif args.tokenizer_ver == 'biogpt2v1':
-    #         tokenizer = BioGptTokenizer.from_pretrained("microsoft/biogpt")
-    #         tokenizer.pad_token = tokenizer.eos_token
-        
-    #     # data location
-    #     train_seq = [2, 3, 4, 6, 7, 9, 10, 11, 12, 14, 15]
-    #     val_seq = [1, 5, 16]
-    #     folder_head = 'dataset/EndoVis-18-VQA/seq_'
-    #     folder_tail = '/vqa/Classification/*.txt'
-        
-    #     # dataloader
-    #     if args.model_ver == 'vb' or args.model_ver == 'vbrm' or args.model_ver == 'vrvb':
-    #         train_dataset = EndoVis18VidVQAVBClassification(train_seq, folder_head, folder_tail, patch_size = args.patch_size, temporal_size=args.temporal_size)
-    #         train_dataloader = DataLoader(dataset=train_dataset, batch_size= args.batch_size, shuffle=True)
-    #         val_dataset = EndoVis18VidVQAVBClassification(val_seq, folder_head, folder_tail, patch_size = args.patch_size, temporal_size=args.temporal_size)
-    #         val_dataloader = DataLoader(dataset=val_dataset, batch_size= args.batch_size, shuffle=False)
-    #     # elif args.model_ver == 'gpt2rs18' or args.model_ver == 'gpt2ViT' or args.model_ver == "gpt2Swin" or args.model_ver == "biogpt2rs18" \
-    #     #             or args.model_ver == 'efgpt2rs18' or args.model_ver =='efgpt2Swin' 
-    #     #             or args.model_ver == 'efgpt2gcViT' \
-    #     #             or args.model_ver == 'efvlegpt2rs18' or args.model_ver == "efvlegpt2Swin" \
-    #     #             or args.model_ver == 'efgpt2rs18gr' or args.model_ver == "efvlegpt2Swingr" or args.model_ver == 'vilgpt2vqa':
-    #     #     train_dataset = EndoVis18VidVQAGPTClassification(train_seq, folder_head, folder_tail, temporal_size=args.temporal_size, model_ver=args.model_ver)
-    #     #     train_dataloader = DataLoader(dataset=train_dataset, batch_size= args.batch_size, shuffle=True)
-    #     #     val_dataset = EndoVis18VidVQAGPTClassification(val_seq, folder_head, folder_tail, temporal_size=args.temporal_size, model_ver=args.model_ver)
-    #     #     val_dataloader = DataLoader(dataset=val_dataset, batch_size= args.batch_size, shuffle=False)
-
-    #     # num_classes
-    #     args.num_class = 18
 
     elif args.dataset_type == 'c80':
         '''
@@ -465,19 +420,19 @@ if __name__ == '__main__':
         folder_tail = '/*.txt'
 
         # dataloader
-        if args.model_ver == 'vb' or args.model_ver == 'vbrm' \
-                # or args.model_ver == 'vrvb'
-                :
+        if args.model_ver == 'vb' or args.model_ver == 'vbrm':
+            # or args.model_ver == 'vrvb'
+            
             train_dataset = Cholec80VQAVBClassification(train_seq, folder_head, folder_tail, patch_size = args.patch_size)
             train_dataloader = DataLoader(dataset=train_dataset, batch_size= args.batch_size, shuffle=True, num_workers=4)
             val_dataset = Cholec80VQAVBClassification(val_seq, folder_head, folder_tail, patch_size = args.patch_size)
             val_dataloader = DataLoader(dataset=val_dataset, batch_size= args.batch_size, shuffle=False, num_workers=2)
-        elif args.model_ver == 'efvlegpt2rs18' or args.model_ver == "efvlegpt2Swin" \
-                # or args.model_ver == 'efgpt2gcViT' \
-                # or args.model_ver == 'vilgpt2vqa' \
-                # or args.model_ver == 'gpt2rs18' or args.model_ver == 'gpt2ViT' or args.model_ver == "gpt2Swin" or args.model_ver == "biogpt2rs18" \
-                # or args.model_ver == 'efgpt2rs18gr' or args.model_ver == "efvlegpt2Swingr" \
-                :
+        elif args.model_ver == 'efvlegpt2rs18' or args.model_ver == "efvlegpt2Swin" or args.model_ver == 'efvlegpt2ViT':
+            # or args.model_ver == 'efgpt2gcViT' \
+            # or args.model_ver == 'vilgpt2vqa' \
+            # or args.model_ver == 'gpt2rs18' or args.model_ver == 'gpt2ViT' or args.model_ver == "gpt2Swin" or args.model_ver == "biogpt2rs18" \
+            # or args.model_ver == 'efgpt2rs18gr' or args.model_ver == "efvlegpt2Swingr" \
+            
             train_dataset = Cholec80VQAGPTClassification(train_seq, folder_head, folder_tail, model_ver=args.model_ver)
             train_dataloader = DataLoader(dataset=train_dataset, batch_size= args.batch_size, shuffle=True, num_workers=8)
             val_dataset = Cholec80VQAGPTClassification(val_seq, folder_head, folder_tail, model_ver=args.model_ver)
@@ -486,45 +441,55 @@ if __name__ == '__main__':
         # num_classes
         args.num_class = 13
 
-    # elif args.dataset_type == 'c80_vid':
-    #     '''
-    #     Train and test dataloader for c80 temporal
-    #     '''
-    #     # tokenizer
-    #     tokenizer = None
-    #     if args.tokenizer_ver == 'btv2': tokenizer = BertTokenizer.from_pretrained('./dataset/bertvocab/v2/bert-Cholec80-VQA/')
-    #     elif args.tokenizer_ver == 'btv3': tokenizer = BertTokenizer.from_pretrained('./dataset/bertvocab/v3/bert-Cholec80-VQA/', do_lower_case=True)
-    #     elif args.tokenizer_ver == 'gpt2v1':
-    #         tokenizer = GPT2Tokenizer.from_pretrained('gpt2')
-    #         tokenizer.pad_token = tokenizer.eos_token
-    #     elif args.tokenizer_ver == 'biogpt2v1':
-    #         tokenizer = BioGptTokenizer.from_pretrained("microsoft/biogpt")
-    #         tokenizer.pad_token = tokenizer.eos_token
+    elif args.dataset_type == 'psi':
+        '''
+        Train and test for psi-ava-vqa dataset
+        '''
+        # tokenizer
+        if args.tokenizer_ver == 'btv2': tokenizer = BertTokenizer.from_pretrained('./dataset/bertvocab/v2/bert-Cholec80-VQA/')
+        elif args.tokenizer_ver == 'btv3': tokenizer = BertTokenizer.from_pretrained('./dataset/bertvocab/v3/bert-Cholec80-VQA/', do_lower_case=True)
+        elif args.tokenizer_ver == 'gpt2v1':
+            tokenizer = GPT2Tokenizer.from_pretrained('gpt2')
+            tokenizer.pad_token = tokenizer.eos_token
+        # elif args.tokenizer_ver == 'biogpt2v1':
+        #     tokenizer = BioGptTokenizer.from_pretrained("microsoft/biogpt")
+        #     tokenizer.pad_token = tokenizer.eos_token
         
-    #     # data location
-    #     train_seq = [1, 2, 3, 4, 6, 7, 8, 9, 10, 13, 14, 15, 16, 18, 20, 21, 22, 23, 24, 25, 28, 29, 30, 32, 33, 34, 35, 36, 37, 38, 39, 40]
-    #     val_seq = [5, 11, 12, 17, 19, 26, 27, 31]
-    #     folder_head = 'dataset/Cholec80-VQA/Classification/'
-    #     folder_tail = '/*.txt'
-        
-    #     # dataloader
-    #     if args.model_ver == 'vb' or args.model_ver == 'vbrm' or args.model_ver == 'vrvb':
-    #         train_dataset = Cholec80VidVQAVBClassification(train_seq, folder_head, folder_tail, patch_size = args.patch_size, temporal_size=args.temporal_size)
-    #         train_dataloader = DataLoader(dataset=train_dataset, batch_size= args.batch_size, shuffle=True)
-    #         val_dataset = Cholec80VidVQAVBClassification(val_seq, folder_head, folder_tail, patch_size = args.patch_size, temporal_size=args.temporal_size)
-    #         val_dataloader = DataLoader(dataset=val_dataset, batch_size= args.batch_size, shuffle=False)
-    #     # elif args.model_ver == 'gpt2rs18' or args.model_ver == 'gpt2ViT' or args.model_ver == "gpt2Swin" or args.model_ver == "biogpt2rs18" \
-    #     #         or args.model_ver == 'efgpt2rs18' or args.model_ver =='efgpt2Swin' \
-    #     #         or args.model_ver == 'efgpt2gcViT' \
-    #     #         or args.model_ver == 'efvlegpt2rs18' or args.model_ver == "efvlegpt2Swin" \
-    #     #         or args.model_ver == 'efgpt2rs18gr' or args.model_ver == "efvlegpt2Swingr" or args.model_ver == 'vilgpt2vqa':
-    #     #     train_dataset = Cholec80VidVQAGPTClassification(train_seq, folder_head, folder_tail, temporal_size=args.temporal_size, model_ver=args.model_ver)
-    #     #     train_dataloader = DataLoader(dataset=train_dataset, batch_size= args.batch_size, shuffle=True)
-    #     #     val_dataset = Cholec80VidVQAGPTClassification(val_seq, folder_head, folder_tail, temporal_size=args.temporal_size, model_ver=args.model_ver)
-    #     #     val_dataloader = DataLoader(dataset=val_dataset, batch_size= args.batch_size, shuffle=False)
+        # dataloader
+        train_seq  =[
+                        "dataset/PSI-AVA-VQA/Train/C1_location.txt", 
+                        "dataset/PSI-AVA-VQA/Train/C2_action.txt", 
+                        "dataset/PSI-AVA-VQA/Train/C3_phase.txt", 
+                        "dataset/PSI-AVA-VQA/Train/C4_step.txt"
+                    ]
+        val_seq    =[
+                        "dataset/PSI-AVA-VQA/Val/C1_location.txt",
+                        "dataset/PSI-AVA-VQA/Val/C2_action.txt",
+                        "dataset/PSI-AVA-VQA/Val/C3_phase.txt",
+                        "dataset/PSI-AVA-VQA/Val/C4_step.txt"
+                    ]
 
-    #     # num_classes
-    #     args.num_class = 13
+        # dataloader
+        if args.model_ver == 'vb' or args.model_ver == 'vbrm':
+            # or args.model_ver == 'vrvb'
+            
+            train_dataset = Cholec80VQAVBClassification(train_seq, folder_head, folder_tail, patch_size = args.patch_size)
+            train_dataloader = DataLoader(dataset=train_dataset, batch_size= args.batch_size, shuffle=True, num_workers=4)
+            val_dataset = Cholec80VQAVBClassification(val_seq, folder_head, folder_tail, patch_size = args.patch_size)
+            val_dataloader = DataLoader(dataset=val_dataset, batch_size= args.batch_size, shuffle=False, num_workers=2)
+        elif args.model_ver == 'efvlegpt2rs18' or args.model_ver == "efvlegpt2Swin" or args.model_ver == 'efvlegpt2ViT':
+            # or args.model_ver == 'efgpt2gcViT' \
+            # or args.model_ver == 'vilgpt2vqa' \
+            # or args.model_ver == 'gpt2rs18' or args.model_ver == 'gpt2ViT' or args.model_ver == "gpt2Swin" or args.model_ver == "biogpt2rs18" \
+            # or args.model_ver == 'efgpt2rs18gr' or args.model_ver == "efvlegpt2Swingr" \
+            
+            train_dataset = PSIAVAVQAGPTClassification(train_seq, model_ver=args.model_ver)
+            train_dataloader = DataLoader(dataset=train_dataset, batch_size= args.batch_size, shuffle=True, num_workers=8)
+            val_dataset = PSIAVAVQAGPTClassification(val_seq, model_ver=args.model_ver)
+            val_dataloader = DataLoader(dataset=val_dataset, batch_size= args.batch_size, shuffle=False, num_workers=8)
+
+        # num_classes
+        args.num_class = 155 #35
     
 
     # Initialize / load checkpoint
@@ -534,14 +499,15 @@ if __name__ == '__main__':
             model = VisualBertClassification(vocab_size=len(tokenizer), layers=args.encoder_layers, n_heads=args.n_heads, num_class = args.num_class)
         elif args.model_ver == 'vbrm':
             model = VisualBertResMLPClassification(vocab_size=len(tokenizer), layers=args.encoder_layers, n_heads=args.n_heads, num_class = args.num_class, token_size = int(args.question_len+(args.patch_size * args.patch_size)))
-        '''vrvb'''
-        # elif args.model_ver == 'vrvb':
-        #     model = ViReVisualBertClassification(vocab_size=len(tokenizer), layers=args.encoder_layers, n_heads=args.n_heads, num_class = args.num_class, version = args.model_subver)
-        ''' Early fusion '''
         elif args.model_ver == 'efvlegpt2rs18':
             model = EFVLEGPT2RS18Classification(num_class = args.num_class, model_subver = args.model_subver, vis_pos_emb = args.vis_pos_emb)
         elif args.model_ver == 'efvlegpt2Swin':
             model = EFVLEGPT2SwinClassification(num_class = args.num_class, model_subver = args.model_subver, vis_pos_emb = args.vis_pos_emb)
+        elif args.model_ver == 'efvlegpt2ViT':
+            model = EFVLEGPT2ViTClassification(num_class = args.num_class, model_subver = args.model_subver, vis_pos_emb = args.vis_pos_emb)
+        '''vrvb'''
+        # elif args.model_ver == 'vrvb':
+        #     model = ViReVisualBertClassification(vocab_size=len(tokenizer), layers=args.encoder_layers, n_heads=args.n_heads, num_class = args.num_class, version = args.model_subver)
         '''Early fusion GPT2 GC ViT'''
         # elif args.model_ver == 'efgpt2gcViT':
         #     model = EFGPT2GCVITClassification(num_class = args.num_class)
@@ -563,7 +529,7 @@ if __name__ == '__main__':
         # elif args.model_ver == 'efvlegpt2Swingr':
         #     model = EFVLEGPT2SwinGRClassification(num_class = args.num_class, model_subver = args.model_subver)
         
-            # print(model)
+        # print(model)
         # optimizer
         optimizer = torch.optim.Adam(model.parameters(), lr=args.lr)
 
