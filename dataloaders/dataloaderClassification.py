@@ -285,3 +285,72 @@ class Cholec80VidVQAVBClassification(Dataset):
         label = self.labels.index(str(self.vqas[idx][1].split('|')[1]))
 
         return loc[-1].split('_')[0], visual_features, question, label
+
+
+'''
+PSI-AVA classification dataloader for VB transfomers
+'''
+class PSIAVAVQAVBClassification(Dataset):
+    '''
+        seq: train_seq  =   [
+                            "dataset/PSI-AVA-VQA/Train/C1_location.txt", 
+                            "dataset/PSI-AVA-VQA/Train/C2_action.txt", 
+                            "dataset/PSI-AVA-VQA/Train/C3_phase.txt", 
+                            "dataset/PSI-AVA-VQA/Train/C4_step.txt"
+                            ]
+             val_seq    =   [
+                            "dataset/PSI-AVA-VQA/Val/C1_location.txt",
+                            "dataset/PSI-AVA-VQA/Val/C2_action.txt",
+                            "dataset/PSI-AVA-VQA/Val/C3_phase.txt",
+                            "dataset/PSI-AVA-VQA/Val/C4_step.txt"
+                            ]
+
+    	folder_head     = 'dataset/EndoVis-18-VQA/seq_'
+    	folder_tail     = '/vqa/Classification/*.txt'
+    	patch_size      = 1/2/3/4/5
+    '''
+    def __init__(self, seq, patch_size=5):
+             
+        self.patch_size = patch_size
+        
+        # files, question and answers
+        filenames = []
+        for curr_seq in seq: 
+            filenames = filenames + glob.glob((curr_seq))
+        
+        self.vqas = []
+        for file in filenames:
+            file_data = open(file, "r")
+            lines = [line.strip("\n") for line in file_data if line != "\n"]
+            file_data.close()
+            for line in lines: self.vqas.append([file, line])
+                    
+        print('Total classes: %d | Total question: %.d' %(len(filenames), len(self.vqas)))
+        
+        # labels
+        self.labels =  ["top left", "top right", "bottom left", "bottom right", #location
+                "Complejo_venoso_dorsal", "Control_Pediculos", "Espacio_de_Retzius", "Fascia_Denonvilliers","Id_Cuello_Vesical", 
+                "LPAD", "LPAI", "Rec_Cuello_Vesical", "Separacion_Prostata_Uretra", "Tiempo_muerto", "Vesículas_Seminales", #phase
+                "Anudar", "Clip_Pediculos", "Corte", "Corte_Prostata", "Corte_Vejiga", "Diseccion_Denon", "Diseccion_Ganglios_Iliacos",
+                "Diseccion_Ganglios_Obturadores", "Diseccion_Prevesical", "Diseccion_Prostata", "Diseccion_Seminal", "Empacar_Ganglios",  
+                "Empacar_Prostata", "Halar_sutura", "Id_Vena_Arteria_Iliaca", "Pasar_Aguja_Cuello", "Pasar_Aguja_Cvdp", "Pasar_Aguja_Uretra", 
+                "Succion","Sujetar_Prostata" ]#, #"Tiempo_muerto", #step
+
+
+    def __len__(self):
+        return len(self.vqas)
+
+    def __getitem__(self, idx):
+        
+        vqa_data = self.vqas[idx][1].split('|')
+        
+        # img
+        img_loc = os.path.join('dataset/PSI-AVA-VQA/keyframes', (str(self.patch_size)+'x'+str(self.patch_size)), vqa_data[0].split('.')[0]+'.hdf5')
+        frame_data = h5py.File(img_loc, 'r')    
+        visual_features = torch.from_numpy(frame_data['visual_features'][:])
+            
+        # question and answer
+        question = vqa_data[1]
+        label = self.labels.index(str(vqa_data[2]))
+
+        return vqa_data[0], visual_features, question, label

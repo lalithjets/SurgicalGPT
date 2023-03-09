@@ -446,8 +446,8 @@ if __name__ == '__main__':
         Train and test for psi-ava-vqa dataset
         '''
         # tokenizer
-        if args.tokenizer_ver == 'btv2': tokenizer = BertTokenizer.from_pretrained('./dataset/bertvocab/v2/bert-Cholec80-VQA/')
-        elif args.tokenizer_ver == 'btv3': tokenizer = BertTokenizer.from_pretrained('./dataset/bertvocab/v3/bert-Cholec80-VQA/', do_lower_case=True)
+        if args.tokenizer_ver == 'btv2': tokenizer = BertTokenizer.from_pretrained("bert-base-uncased")
+        elif args.tokenizer_ver == 'btv3': tokenizer = BertTokenizer.from_pretrained("bert-base-uncased")
         elif args.tokenizer_ver == 'gpt2v1':
             tokenizer = GPT2Tokenizer.from_pretrained('gpt2')
             tokenizer.pad_token = tokenizer.eos_token
@@ -458,24 +458,22 @@ if __name__ == '__main__':
         # dataloader
         train_seq  =[
                         "dataset/PSI-AVA-VQA/Train/C1_location.txt", 
-                        "dataset/PSI-AVA-VQA/Train/C2_action.txt", 
                         "dataset/PSI-AVA-VQA/Train/C3_phase.txt", 
                         "dataset/PSI-AVA-VQA/Train/C4_step.txt"
-                    ]
+                    ] # "dataset/PSI-AVA-VQA/Train/C2_action.txt", 
         val_seq    =[
                         "dataset/PSI-AVA-VQA/Val/C1_location.txt",
-                        "dataset/PSI-AVA-VQA/Val/C2_action.txt",
                         "dataset/PSI-AVA-VQA/Val/C3_phase.txt",
                         "dataset/PSI-AVA-VQA/Val/C4_step.txt"
-                    ]
+                    ] # "dataset/PSI-AVA-VQA/Val/C2_action.txt",
 
         # dataloader
         if args.model_ver == 'vb' or args.model_ver == 'vbrm':
             # or args.model_ver == 'vrvb'
             
-            train_dataset = Cholec80VQAVBClassification(train_seq, folder_head, folder_tail, patch_size = args.patch_size)
+            train_dataset = PSIAVAVQAVBClassification(train_seq, patch_size = args.patch_size)
             train_dataloader = DataLoader(dataset=train_dataset, batch_size= args.batch_size, shuffle=True, num_workers=4)
-            val_dataset = Cholec80VQAVBClassification(val_seq, folder_head, folder_tail, patch_size = args.patch_size)
+            val_dataset = PSIAVAVQAVBClassification(val_seq, patch_size = args.patch_size)
             val_dataloader = DataLoader(dataset=val_dataset, batch_size= args.batch_size, shuffle=False, num_workers=2)
         elif args.model_ver == 'efvlegpt2rs18' or args.model_ver == "efvlegpt2Swin" or args.model_ver == 'efvlegpt2ViT':
             # or args.model_ver == 'efgpt2gcViT' \
@@ -489,7 +487,7 @@ if __name__ == '__main__':
             val_dataloader = DataLoader(dataset=val_dataset, batch_size= args.batch_size, shuffle=False, num_workers=8)
 
         # num_classes
-        args.num_class = 155 #35
+        args.num_class = 35 #155 #35
     
 
     # Initialize / load checkpoint

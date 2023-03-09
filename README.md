@@ -42,8 +42,6 @@ conda env create --name svqa --file=env.yaml
 
 ---
 ## Directory Setup
-<!---------------------------------------------------------------------------------------------------------------->
-In this project, we implement our method using the Pytorch and DGL library, the structure is as follows: 
 
 
 ---

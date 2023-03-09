@@ -157,7 +157,7 @@ class EndoVis18VQAGPTClassification(Dataset):
         question = self.vqas[idx][1].split('|')[0]
         label = self.labels.index(str(self.vqas[idx][1].split('|')[1]))
 
-        return loc[-1].split('_')[0], img, question, label
+        return os.path.join(loc[0],loc[1],loc[2], 'left_frames',loc[-1].split('_')[0]+'.png'), img, question, label
 
 
 '''
@@ -229,7 +229,7 @@ class Cholec80VQAGPTClassification(Dataset):
         question = self.vqas[idx][1].split('|')[0]
         label = self.labels.index(str(self.vqas[idx][1].split('|')[1]))
 
-        return loc[-1].split('_')[0], img, question, label
+        return os.path.join(loc[0],loc[1], 'cropped_image',loc[3],loc[-1].split('_')[0]+'.png'), img, question, label
 
 
 
@@ -289,36 +289,36 @@ class PSIAVAVQAGPTClassification(Dataset):
                 "Anudar", "Clip_Pediculos", "Corte", "Corte_Prostata", "Corte_Vejiga", "Diseccion_Denon", "Diseccion_Ganglios_Iliacos",
                 "Diseccion_Ganglios_Obturadores", "Diseccion_Prevesical", "Diseccion_Prostata", "Diseccion_Seminal", "Empacar_Ganglios",  
                 "Empacar_Prostata", "Halar_sutura", "Id_Vena_Arteria_Iliaca", "Pasar_Aguja_Cuello", "Pasar_Aguja_Cvdp", "Pasar_Aguja_Uretra", 
-                "Succion","Sujetar_Prostata", #"Tiempo_muerto", #step
-                "['Cauterize']", "['Cauterize', 'Close']", "['Cauterize', 'Close', 'Cut']", "['Cauterize', 'Close', 'Grasp']",
-                "['Cauterize', 'Close', 'Hold']", "['Cauterize', 'Close', 'Push']", "['Cauterize', 'Cut']", "['Cauterize', 'Cut', 'Hold']",
-                "['Cauterize', 'Cut', 'Open Something']", "['Cauterize', 'Cut', 'Open']", "['Cauterize', 'Cut', 'Push']",
-                "['Cauterize', 'Cut', 'Travel']", "['Cauterize', 'Hold']", "['Cauterize', 'Hold', 'Pull']", "['Cauterize', 'Hold', 'Push']",
-                "['Cauterize', 'Hold', 'Still']", "['Cauterize', 'Open']", "['Cauterize', 'Open', 'Push']", "['Cauterize', 'Push']",
-                "['Cauterize', 'Push', 'Travel']", "['Cauterize', 'Release', 'Travel']", "['Cauterize', 'Travel']", "['Close Something']",
-                "['Close Something', 'Hold', 'Pull']", "['Close Something', 'Hold', 'Push']", "['Close Something', 'Hold', 'Travel']",
-                "['Close Something', 'Hold']", "['Close']", "['Close', 'Cut']", "['Close', 'Cut', 'Push']", "['Close', 'Cut', 'Travel']",
-                "['Close', 'Grasp']", "['Close', 'Grasp', 'Pull']", "['Close', 'Grasp', 'Push']", "['Close', 'Grasp', 'Travel']",
-                "['Close', 'Hold']", "['Close', 'Hold', 'Staple']", "['Close', 'Push']", "['Close', 'Push', 'Travel']",
-                "['Close', 'Release', 'Travel']", "['Close', 'Staple']", "['Close', 'Still']", "['Close', 'Still', 'Travel']",
-                "['Close', 'Travel']", "['Cut']", "['Cut', 'Grasp', 'Open']", "['Cut', 'Hold', 'Pull']", "['Cut', 'Hold', 'Push']",
-                "['Cut', 'Open Something']", "['Cut', 'Open Something', 'Pull']", "['Cut', 'Open']", "['Cut', 'Open', 'Push']",
-                "['Cut', 'Pull']", "['Cut', 'Push']", "['Cut', 'Push', 'Travel']", "['Cut', 'Release', 'Travel']", "['Cut', 'Travel']",
-                "['Grasp']", "['Grasp', 'Hold']", "['Grasp', 'Open']", "['Grasp', 'Open', 'Pull']", "['Grasp', 'Open', 'Push']",
-                "['Grasp', 'Pull']", "['Grasp', 'Push']", "['Grasp', 'Push', 'Travel']", "['Grasp', 'Travel']", "['Hold']",
-                "['Hold', 'Open Something']", "['Hold', 'Open Something', 'Pull']", "['Hold', 'Open Something', 'Travel']",
-                "['Hold', 'Open', 'Push']", "['Hold', 'Open', 'Travel']", "['Hold', 'Pull']", "['Hold', 'Pull', 'Still']",
-                "['Hold', 'Pull', 'Suction']", "['Hold', 'Pull', 'Travel']", "['Hold', 'Push']", "['Hold', 'Push', 'Staple']",
-                "['Hold', 'Push', 'Still']", "['Hold', 'Push', 'Suction']", "['Hold', 'Push', 'Travel']", "['Hold', 'Still']",
-                "['Hold', 'Suction', 'Travel']", "['Hold', 'Travel']", "['Open Something']", "['Open Something', 'Pull']",
-                "['Open Something', 'Push']", "['Open Something', 'Still']", "['Open']", "['Open', 'Push']", "['Open', 'Push', 'Release']",
-                "['Open', 'Push', 'Travel']", "['Open', 'Release']", "['Open', 'Release', 'Travel']", "['Open', 'Still']",
-                "['Open', 'Still', 'Travel']", "['Open', 'Travel']", "['Pull', 'Suction']", "['Pull']", "['Push']", "['Push', 'Release']",
-                "['Push', 'Staple']", "['Push', 'Still']", "['Push', 'Suction']", "['Push', 'Suction', 'Travel']", "['Push', 'Travel']",
-                "['Push', 'Wash']", "['Release']", "['Release', 'Suction', 'Travel']", "['Release', 'Travel']", "['Staple']", "['Still']",
-                "['Still', 'Suction']", "['Still', 'Travel']", "['Suction']", "['Suction', 'Travel']", "['Suction', 'Wash']",
-                "['Travel']", "['Travel', 'Wash']", "['Wash']" #action
-                ]
+                "Succion","Sujetar_Prostata" ]#, #"Tiempo_muerto", #step
+                # "['Cauterize']", "['Cauterize', 'Close']", "['Cauterize', 'Close', 'Cut']", "['Cauterize', 'Close', 'Grasp']",
+                # "['Cauterize', 'Close', 'Hold']", "['Cauterize', 'Close', 'Push']", "['Cauterize', 'Cut']", "['Cauterize', 'Cut', 'Hold']",
+                # "['Cauterize', 'Cut', 'Open Something']", "['Cauterize', 'Cut', 'Open']", "['Cauterize', 'Cut', 'Push']",
+                # "['Cauterize', 'Cut', 'Travel']", "['Cauterize', 'Hold']", "['Cauterize', 'Hold', 'Pull']", "['Cauterize', 'Hold', 'Push']",
+                # "['Cauterize', 'Hold', 'Still']", "['Cauterize', 'Open']", "['Cauterize', 'Open', 'Push']", "['Cauterize', 'Push']",
+                # "['Cauterize', 'Push', 'Travel']", "['Cauterize', 'Release', 'Travel']", "['Cauterize', 'Travel']", "['Close Something']",
+                # "['Close Something', 'Hold', 'Pull']", "['Close Something', 'Hold', 'Push']", "['Close Something', 'Hold', 'Travel']",
+                # "['Close Something', 'Hold']", "['Close']", "['Close', 'Cut']", "['Close', 'Cut', 'Push']", "['Close', 'Cut', 'Travel']",
+                # "['Close', 'Grasp']", "['Close', 'Grasp', 'Pull']", "['Close', 'Grasp', 'Push']", "['Close', 'Grasp', 'Travel']",
+                # "['Close', 'Hold']", "['Close', 'Hold', 'Staple']", "['Close', 'Push']", "['Close', 'Push', 'Travel']",
+                # "['Close', 'Release', 'Travel']", "['Close', 'Staple']", "['Close', 'Still']", "['Close', 'Still', 'Travel']",
+                # "['Close', 'Travel']", "['Cut']", "['Cut', 'Grasp', 'Open']", "['Cut', 'Hold', 'Pull']", "['Cut', 'Hold', 'Push']",
+                # "['Cut', 'Open Something']", "['Cut', 'Open Something', 'Pull']", "['Cut', 'Open']", "['Cut', 'Open', 'Push']",
+                # "['Cut', 'Pull']", "['Cut', 'Push']", "['Cut', 'Push', 'Travel']", "['Cut', 'Release', 'Travel']", "['Cut', 'Travel']",
+                # "['Grasp']", "['Grasp', 'Hold']", "['Grasp', 'Open']", "['Grasp', 'Open', 'Pull']", "['Grasp', 'Open', 'Push']",
+                # "['Grasp', 'Pull']", "['Grasp', 'Push']", "['Grasp', 'Push', 'Travel']", "['Grasp', 'Travel']", "['Hold']",
+                # "['Hold', 'Open Something']", "['Hold', 'Open Something', 'Pull']", "['Hold', 'Open Something', 'Travel']",
+                # "['Hold', 'Open', 'Push']", "['Hold', 'Open', 'Travel']", "['Hold', 'Pull']", "['Hold', 'Pull', 'Still']",
+                # "['Hold', 'Pull', 'Suction']", "['Hold', 'Pull', 'Travel']", "['Hold', 'Push']", "['Hold', 'Push', 'Staple']",
+                # "['Hold', 'Push', 'Still']", "['Hold', 'Push', 'Suction']", "['Hold', 'Push', 'Travel']", "['Hold', 'Still']",
+                # "['Hold', 'Suction', 'Travel']", "['Hold', 'Travel']", "['Open Something']", "['Open Something', 'Pull']",
+                # "['Open Something', 'Push']", "['Open Something', 'Still']", "['Open']", "['Open', 'Push']", "['Open', 'Push', 'Release']",
+                # "['Open', 'Push', 'Travel']", "['Open', 'Release']", "['Open', 'Release', 'Travel']", "['Open', 'Still']",
+                # "['Open', 'Still', 'Travel']", "['Open', 'Travel']", "['Pull', 'Suction']", "['Pull']", "['Push']", "['Push', 'Release']",
+                # "['Push', 'Staple']", "['Push', 'Still']", "['Push', 'Suction']", "['Push', 'Suction', 'Travel']", "['Push', 'Travel']",
+                # "['Push', 'Wash']", "['Release']", "['Release', 'Suction', 'Travel']", "['Release', 'Travel']", "['Staple']", "['Still']",
+                # "['Still', 'Suction']", "['Still', 'Travel']", "['Suction']", "['Suction', 'Travel']", "['Suction', 'Wash']",
+                # "['Travel']", "['Travel', 'Wash']", "['Wash']" #action
+                
         
     def __len__(self):
         return len(self.vqas)
@@ -340,4 +340,4 @@ class PSIAVAVQAGPTClassification(Dataset):
         question = vqa_data[1]
         label = self.labels.index(str(vqa_data[2]))
 
-        return loc[-1].split('_')[0], img, question, label
+        return vqa_data[0], img, question, label
