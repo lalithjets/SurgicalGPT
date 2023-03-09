@@ -20,10 +20,10 @@ class MedVQAGPTClassification(Dataset):
         validation = if validation, load val.txt, else load train.txt (True / False)
     '''
     def __init__(self, datafolder, imgfolder, cat, model_ver = None, transform=None, validation = False):
-        if model_ver == "efvlegpt2ViT": #model_ver == "gpt2ViT":
+        if model_ver == "efvlegpt2ViT": 
             self.transform = None
             self.image_processor = ViTFeatureExtractor.from_pretrained('google/vit-base-patch16-224-in21k')
-        elif model_ver == "efvlegpt2Swin": #model_ver == "gpt2Swin" or model_ver == "efvlegpt2Swingr"
+        elif model_ver == "efvlegpt2Swin": 
             self.transform = None
             self.image_processor = AutoFeatureExtractor.from_pretrained("microsoft/swin-tiny-patch4-window7-224")
         elif transform:
@@ -100,10 +100,10 @@ class EndoVis18VQAGPTClassification(Dataset):
     '''
     def __init__(self, seq, folder_head, folder_tail, model_ver = None, transform=None):
         
-        if model_ver == "efvlegpt2ViT": #model_ver == "gpt2ViT":
+        if model_ver == "efvlegpt2ViT": 
             self.transform = None
             self.image_processor = ViTFeatureExtractor.from_pretrained('google/vit-base-patch16-224-in21k')
-        elif model_ver == "efvlegpt2Swin": #or model_ver == "gpt2Swin" or model_ver == "efvlegpt2Swingr":
+        elif model_ver == "efvlegpt2Swin": 
             self.transform = None
             self.image_processor = AutoFeatureExtractor.from_pretrained("microsoft/swin-tiny-patch4-window7-224")
         elif transform:
@@ -114,12 +114,6 @@ class EndoVis18VQAGPTClassification(Dataset):
                                     transforms.ToTensor(),
                                     transforms.Normalize(mean=[0.485, 0.456, 0.406],std=[0.229, 0.224, 0.225])
                                     ])
-        # elif model_ver == "efgpt2gcViT":
-        #     self.transform = transforms.Compose([
-        #                             transforms.Resize((224,224)),
-        #                             transforms.ToTensor(),
-        #                             transforms.Normalize(mean=[0.485, 0.456, 0.406],std=[0.229, 0.224, 0.225])
-        #                             ])
         
 
         # files, question and answers
@@ -173,10 +167,10 @@ class Cholec80VQAGPTClassification(Dataset):
     '''
     def __init__(self, seq, folder_head, folder_tail, model_ver = None, transform=None):
 
-        if model_ver == "efvlegpt2ViT": #model_ver == "gpt2ViT":
+        if model_ver == "efvlegpt2ViT": 
             self.transform = None
             self.image_processor = ViTFeatureExtractor.from_pretrained('google/vit-base-patch16-224-in21k')
-        elif model_ver == "efvlegpt2Swin":# or model_ver == "gpt2Swin" or model_ver == "efvlegpt2Swingr":
+        elif model_ver == "efvlegpt2Swin":
             self.transform = None
             self.image_processor = AutoFeatureExtractor.from_pretrained("microsoft/swin-tiny-patch4-window7-224")
         elif transform:
@@ -253,10 +247,10 @@ class PSIAVAVQAGPTClassification(Dataset):
     '''
     def __init__(self, seq, model_ver = None, transform=None):
 
-        if model_ver == "efvlegpt2ViT": #model_ver == "gpt2ViT":
+        if model_ver == "efvlegpt2ViT": 
             self.transform = None
             self.image_processor = ViTFeatureExtractor.from_pretrained('google/vit-base-patch16-224-in21k')
-        elif model_ver == "efvlegpt2Swin":# or model_ver == "gpt2Swin" or model_ver == "efvlegpt2Swingr":
+        elif model_ver == "efvlegpt2Swin":
             self.transform = None
             self.image_processor = AutoFeatureExtractor.from_pretrained("microsoft/swin-tiny-patch4-window7-224")
         elif transform:
@@ -289,35 +283,7 @@ class PSIAVAVQAGPTClassification(Dataset):
                 "Anudar", "Clip_Pediculos", "Corte", "Corte_Prostata", "Corte_Vejiga", "Diseccion_Denon", "Diseccion_Ganglios_Iliacos",
                 "Diseccion_Ganglios_Obturadores", "Diseccion_Prevesical", "Diseccion_Prostata", "Diseccion_Seminal", "Empacar_Ganglios",  
                 "Empacar_Prostata", "Halar_sutura", "Id_Vena_Arteria_Iliaca", "Pasar_Aguja_Cuello", "Pasar_Aguja_Cvdp", "Pasar_Aguja_Uretra", 
-                "Succion","Sujetar_Prostata" ]#, #"Tiempo_muerto", #step
-                # "['Cauterize']", "['Cauterize', 'Close']", "['Cauterize', 'Close', 'Cut']", "['Cauterize', 'Close', 'Grasp']",
-                # "['Cauterize', 'Close', 'Hold']", "['Cauterize', 'Close', 'Push']", "['Cauterize', 'Cut']", "['Cauterize', 'Cut', 'Hold']",
-                # "['Cauterize', 'Cut', 'Open Something']", "['Cauterize', 'Cut', 'Open']", "['Cauterize', 'Cut', 'Push']",
-                # "['Cauterize', 'Cut', 'Travel']", "['Cauterize', 'Hold']", "['Cauterize', 'Hold', 'Pull']", "['Cauterize', 'Hold', 'Push']",
-                # "['Cauterize', 'Hold', 'Still']", "['Cauterize', 'Open']", "['Cauterize', 'Open', 'Push']", "['Cauterize', 'Push']",
-                # "['Cauterize', 'Push', 'Travel']", "['Cauterize', 'Release', 'Travel']", "['Cauterize', 'Travel']", "['Close Something']",
-                # "['Close Something', 'Hold', 'Pull']", "['Close Something', 'Hold', 'Push']", "['Close Something', 'Hold', 'Travel']",
-                # "['Close Something', 'Hold']", "['Close']", "['Close', 'Cut']", "['Close', 'Cut', 'Push']", "['Close', 'Cut', 'Travel']",
-                # "['Close', 'Grasp']", "['Close', 'Grasp', 'Pull']", "['Close', 'Grasp', 'Push']", "['Close', 'Grasp', 'Travel']",
-                # "['Close', 'Hold']", "['Close', 'Hold', 'Staple']", "['Close', 'Push']", "['Close', 'Push', 'Travel']",
-                # "['Close', 'Release', 'Travel']", "['Close', 'Staple']", "['Close', 'Still']", "['Close', 'Still', 'Travel']",
-                # "['Close', 'Travel']", "['Cut']", "['Cut', 'Grasp', 'Open']", "['Cut', 'Hold', 'Pull']", "['Cut', 'Hold', 'Push']",
-                # "['Cut', 'Open Something']", "['Cut', 'Open Something', 'Pull']", "['Cut', 'Open']", "['Cut', 'Open', 'Push']",
-                # "['Cut', 'Pull']", "['Cut', 'Push']", "['Cut', 'Push', 'Travel']", "['Cut', 'Release', 'Travel']", "['Cut', 'Travel']",
-                # "['Grasp']", "['Grasp', 'Hold']", "['Grasp', 'Open']", "['Grasp', 'Open', 'Pull']", "['Grasp', 'Open', 'Push']",
-                # "['Grasp', 'Pull']", "['Grasp', 'Push']", "['Grasp', 'Push', 'Travel']", "['Grasp', 'Travel']", "['Hold']",
-                # "['Hold', 'Open Something']", "['Hold', 'Open Something', 'Pull']", "['Hold', 'Open Something', 'Travel']",
-                # "['Hold', 'Open', 'Push']", "['Hold', 'Open', 'Travel']", "['Hold', 'Pull']", "['Hold', 'Pull', 'Still']",
-                # "['Hold', 'Pull', 'Suction']", "['Hold', 'Pull', 'Travel']", "['Hold', 'Push']", "['Hold', 'Push', 'Staple']",
-                # "['Hold', 'Push', 'Still']", "['Hold', 'Push', 'Suction']", "['Hold', 'Push', 'Travel']", "['Hold', 'Still']",
-                # "['Hold', 'Suction', 'Travel']", "['Hold', 'Travel']", "['Open Something']", "['Open Something', 'Pull']",
-                # "['Open Something', 'Push']", "['Open Something', 'Still']", "['Open']", "['Open', 'Push']", "['Open', 'Push', 'Release']",
-                # "['Open', 'Push', 'Travel']", "['Open', 'Release']", "['Open', 'Release', 'Travel']", "['Open', 'Still']",
-                # "['Open', 'Still', 'Travel']", "['Open', 'Travel']", "['Pull', 'Suction']", "['Pull']", "['Push']", "['Push', 'Release']",
-                # "['Push', 'Staple']", "['Push', 'Still']", "['Push', 'Suction']", "['Push', 'Suction', 'Travel']", "['Push', 'Travel']",
-                # "['Push', 'Wash']", "['Release']", "['Release', 'Suction', 'Travel']", "['Release', 'Travel']", "['Staple']", "['Still']",
-                # "['Still', 'Suction']", "['Still', 'Travel']", "['Suction']", "['Suction', 'Travel']", "['Suction', 'Wash']",
-                # "['Travel']", "['Travel', 'Wash']", "['Wash']" #action
+                "Succion","Sujetar_Prostata" ]#
                 
         
     def __len__(self):

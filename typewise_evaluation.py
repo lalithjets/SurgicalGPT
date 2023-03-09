@@ -93,18 +93,6 @@ def validate(args, val_loader, model, criterion, epoch, tokenizer, device):
     print('Test: epoch: %d loss: %.6f | Acc: %.6f | Precision: %.6f | Recall: %.6f | FScore: %.6f' %(epoch, total_loss, acc, precision, recall, fscore))
 
     if args.save_output:
-        # '''
-        #     Saving predictions
-        # '''
-        # if os.path.exists(args.checkpoint.split('.')[0] +'/') == False:
-        #     os.mkdir(args.checkpoint.split('.')[0]) 
-        # file1 = open(args.checkpoint.split('.')[0] + '/labels.txt', 'w')
-        # file1.write(str(label_true))
-        # file1.close()
-
-        # file1 = open(args.checkpoint.split('.')[0] + '/predictions.txt', 'w')
-        # file1.write(str(label_pred))
-        # file1.close()
 
         if args.dataset_type == 'c80':
             convert_arr = ['no', 'calot triangle dissection', 'yes', '1', '2', 'gallbladder dissection', 

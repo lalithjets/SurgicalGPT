@@ -38,12 +38,3 @@ Sample command
 ```
 python typewise_evaluation.py --model_ver efvlegpt2Swin --dataset_type m18  --checkpoint checkpoints/efvlegpt2Swin/m18_2/m18_v1_z_qf_Best.pth.tar --class_file "dataset/EndoVis-18-VQA/Val/endovis_C1.txt"
 ```
-
----
-## References
-Code adopted and modified from :
-
----
-
-## Contact
----
