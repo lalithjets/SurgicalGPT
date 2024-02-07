@@ -9,19 +9,13 @@
 </samp>   
 
 ---
-| **[[```arXiv```](<https://arxiv.org/abs/2304.09974>)]** | **[[```Paper```](<https://link.springer.com/chapter/10.1007/978-3-031-43996-4_27>)]** | 
-|:-------------------:|:-------------------:|:-------------------:|
-    
+| **[[```arXiv```](<https://arxiv.org/abs/2304.09974>)]** | **[[```Paper```](<https://link.springer.com/chapter/10.1007/978-3-031-43996-4_27>)]** |     
 The International Conference on Medical Image Computing and Computer Assisted Intervention (MICCAI) 2023
----
-
 
 </div>     
 
 ---
-
 ## Dataset
-
 1. EndoVis-18-VQA  **[[`EndoVis-18-VQA Q&A pair annotation`](https://drive.google.com/drive/folders/1hu_yK27Xz2_lvjjZ97-WF2MK_JO14MWI?usp=sharing)]**
 2. Cholec80-VQA **[[`Cholec80-VQA Q&A pair annotation`](https://drive.google.com/drive/folders/1yrg0cR2haNTRBHg-Fho0o7TFVSjN64ym?usp=sharing)]**
 3. PSI-AVA-VQA **[[`PSI-VQA Q&A pair annotation`](https://drive.google.com/drive/folders/17OkeLxOCep3f99nDkdU_Y9EkPwHgT814?usp=sharing)]**
